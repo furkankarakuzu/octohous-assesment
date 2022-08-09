@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-row justify="center">
-        <v-col cols="12" sm="10" md="8" lg="6">
+        <v-col cols="10" sm="8" md="4" lg="4">
           <v-card ref="form">
             <v-card-text>
               <v-text-field
@@ -65,29 +65,13 @@
                 placeholder="Select..."
                 required
               ></v-autocomplete>
+              <div class="d-flex">
+                <v-btn text> Cancel </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="primary"> Normal Button </v-btn>
+              </div>
             </v-card-text>
             <v-divider class="mt-12"></v-divider>
-            <v-card-actions>
-              <v-btn text> Cancel </v-btn>
-              <v-spacer></v-spacer>
-              <v-slide-x-reverse-transition>
-                <v-tooltip v-if="formHasErrors" left>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      class="my-0"
-                      v-bind="attrs"
-                      @click="resetForm"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-refresh</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Refresh form</span>
-                </v-tooltip>
-              </v-slide-x-reverse-transition>
-              <v-btn color="primary" text @click="submit"> Submit </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -102,6 +86,11 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    submit() {
+      console.log("hey");
+    },
+  },
 };
 </script>
 
