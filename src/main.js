@@ -2,10 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-import VueFeather from "vue-feather";
-
+import { registerComponents } from "./plugins/GlobalComponents";
 const app = createApp(App);
-app.component(VueFeather.name, VueFeather);
+registerComponents(app);
 app.use(vuetify);
 
 loadFonts();

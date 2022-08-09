@@ -5,13 +5,6 @@
         <v-col cols="10" sm="8" md="4" lg="4">
           <v-card ref="form">
             <v-card-text>
-              <!-- <v-textarea
-                outlined
-                clearable
-                auto-grow
-                rows="3"
-                placeholder="Your text here"
-              ></v-textarea> -->
               <textarea
                 placeholder="Your text here"
                 id="text-input"
@@ -46,6 +39,60 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row justify="center">
+        <v-col cols="10" sm="8" md="4" lg="4">
+          <v-card>
+            <v-card-text class="d-flex">
+              <v-row>
+                <v-col cols="1"
+                  ><v-avatar color="primary" size="40">
+                    <img
+                      alt="user"
+                      width="40"
+                      height="40"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTAHbPcscIvQSrHqnMkd4hI2VOfZJ2ZtTgVg&usqp=CAU"
+                    />
+                  </v-avatar>
+                </v-col>
+                <v-col class="ms-4" cols="10"
+                  ><div>
+                    <span class="post-date">30.08.2022 12:39</span>
+                    <p>
+                      <span class="text-primary font-weight-bold"
+                        >Jane Doe</span
+                      >
+                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                      Animi alias esse dicta placeat
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <div>
+                <v-btn size="small" icon elevation="0">
+                  <LikeIcon />
+                  <span class="ms-1" style="color: #00000029">0</span>
+                </v-btn>
+                <v-btn size="small" icon elevation="0">
+                  <UnlikeIcon />
+                  <span class="ms-1" style="color: #00000029">0</span>
+                </v-btn>
+              </div>
+              <v-spacer></v-spacer>
+              <div>
+                <v-btn size="small" icon elevation="0">
+                  <EditIcon />
+                </v-btn>
+                <v-btn size="small" icon elevation="0">
+                  <DeleteIcon />
+                </v-btn>
+              </div>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-main>
   </v-app>
 </template>
@@ -53,7 +100,6 @@
 <script>
 export default {
   name: "App",
-
   data: () => ({
     //
   }),
@@ -82,5 +128,10 @@ body {
 #text-input:focus-visible {
   outline: 0;
   border-style: none;
+}
+
+.post-date {
+  font-size: 11px;
+  color: #99a4ae;
 }
 </style>
