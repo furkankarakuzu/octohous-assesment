@@ -93,11 +93,16 @@
                       <span class="text-primary font-weight-bold me-2"
                         >Jane Doe</span
                       >
-                      <span v-if="!editPost">
+                      <span v-if="!post.editPost">
                         {{ post.text }}
                       </span>
                       <span class="d-flex justify-space-between" v-else>
-                        <input type="text" class="w-100" v-model="post.text" />
+                        <input
+                          style="border: 1px solid gray"
+                          type="text"
+                          class="w-100 pa-2"
+                          v-model="post.text"
+                        />
                         <v-btn color="primary" @click="updatePost(post)">
                           Edit
                         </v-btn>
@@ -132,7 +137,12 @@
               </div>
               <v-spacer></v-spacer>
               <div>
-                <v-btn size="small" @click="editPost = true" icon elevation="0">
+                <v-btn
+                  size="small"
+                  @click="post.editPost = true"
+                  icon
+                  elevation="0"
+                >
                   <EditIcon />
                 </v-btn>
                 <v-btn
@@ -164,8 +174,6 @@ export default {
     uploadedImage: null,
     /**/
     likedPosts: [],
-    //update variables
-    editPost: false,
     //delete variables
     deleteWaiting: false,
     deleteWaitingTimeOut: null,
@@ -248,6 +256,7 @@ export default {
     async updatePost(post) {
       try {
         post.editedDate = new Date();
+        delete post.editPost;
         await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
         this.editPost = false;
         await this.getPosts();
