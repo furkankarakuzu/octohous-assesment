@@ -21,11 +21,10 @@
                   v-model="postText"
                   rows="4"
                 ></textarea>
-                <img
-                  v-if="uploadedImage"
-                  class="post-image"
-                  :src="uploadedImage"
-                />
+                <div class="post-image-container" v-if="uploadedImage">
+                  <button id="x" @click="uploadedImage = null">X</button>
+                  <img class="post-image" :src="uploadedImage" />
+                </div>
               </div>
               <div class="d-flex">
                 <div>
@@ -108,12 +107,10 @@
                         </v-btn>
                       </span>
                     </p>
-                    <div v-if="post.image">
-                      <img
-                        class="post-image"
-                        :alt="post.text"
-                        :src="post.image"
-                      />
+
+                    <div class="post-image-container mt-2" v-if="post.image">
+                      <button id="x" @click="post.image = null" v-if="post.editPost">X</button>
+                      <img class="post-image" :src="post.image" />
                     </div>
                   </div>
                 </v-col>
@@ -220,6 +217,15 @@ export default {
 
     //LIKE/DISLIKE FUNCTIONS
     async likePost(post) {
+      if (localStorage.getItem("dislikedPosts")) {
+        let ids = localStorage.getItem("dislikedPosts").split(",");
+        if (ids.includes(post.id.toString())) {
+          post.dislike--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+          localStorage.setItem("dislikedPosts", ids.join(","));
+        }
+      }
       if (localStorage.getItem("likedPosts")) {
         let ids = localStorage.getItem("likedPosts").split(",");
         console.log(post.id);
@@ -244,6 +250,15 @@ export default {
       }
     },
     async dislikePost(post) {
+      if (localStorage.getItem("likedPosts")) {
+        let ids = localStorage.getItem("likedPosts").split(",");
+        if (ids.includes(post.id.toString())) {
+          post.like--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+          localStorage.setItem("likedPosts", ids.join(","));
+        }
+      }
       if (localStorage.getItem("dislikedPosts")) {
         let ids = localStorage.getItem("dislikedPosts").split(",");
         if (ids.includes(post.id.toString())) {
@@ -384,5 +399,21 @@ body {
   position: fixed;
   right: 40px;
   bottom: 40px;
+}
+
+.post-image-container {
+  width: 80%;
+  /*border-radius: 25px;*/
+  overflow: visible;
+  position: relative;
+}
+#x {
+  position: absolute;
+  background: #9b59b6;
+  color: white;
+  top: -10px;
+  right: -10px;
+  padding: 3px 7px;
+  border-radius: 50%;
 }
 </style>

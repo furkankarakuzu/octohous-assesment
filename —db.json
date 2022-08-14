@@ -12,7 +12,7 @@
       "text": "2",
       "createdDate": "2022-08-14T18:00:01.826Z",
       "like": 0,
-      "dislike": 0,
+      "dislike": 1,
       "image": null,
       "id": 2
     },
@@ -23,6 +23,15 @@
       "dislike": 1,
       "image": null,
       "id": 3
+    },
+    {
+      "text": "sadadasdasd1",
+      "createdDate": "2022-08-14T19:03:34.211Z",
+      "like": 0,
+      "dislike": 0,
+      "image": null,
+      "id": 4,
+      "editedDate": "2022-08-14T19:05:20.468Z"
     }
   ],
   "comments": [],
