@@ -15,6 +15,14 @@
       "dislike": 0,
       "image": null,
       "id": 4
+    },
+    {
+      "text": "asdasdasd",
+      "date": "2022-08-14T11:10:27.428Z",
+      "like": 0,
+      "dislike": 0,
+      "image": "blob:http://localhost:8080/6394c73b-7314-4815-878b-08d8272369d0",
+      "id": 5
     }
   ],
   "comments": [],

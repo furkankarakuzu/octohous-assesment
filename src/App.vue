@@ -14,12 +14,19 @@
         <v-col cols="10" sm="8" md="4" lg="4">
           <v-card ref="form">
             <v-card-text>
-              <textarea
-                placeholder="Your text here"
-                id="text-input"
-                v-model="postText"
-                rows="4"
-              ></textarea>
+              <div>
+                <textarea
+                  placeholder="Your text here"
+                  id="text-input"
+                  v-model="postText"
+                  rows="4"
+                ></textarea>
+                <img
+                  v-if="uploadedImage"
+                  class="post-image"
+                  :src="uploadedImage"
+                />
+              </div>
               <div class="d-flex">
                 <div>
                   <input
@@ -230,7 +237,7 @@ export default {
       this.uploadedImage = URL.createObjectURL(file);
     },
 
-    //UPDATE FUNCTIONS
+    //UPDATE FUNCTION
     async updatePost(post) {
       try {
         await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
