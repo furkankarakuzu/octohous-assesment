@@ -1,22 +1,28 @@
 {
   "posts": [
     {
-      "text": "asdasdasd5",
-      "createdDate": "2022-08-14T11:18:26.644Z",
+      "text": "1",
+      "createdDate": "2022-08-14T18:00:00.971Z",
       "like": 0,
       "dislike": 0,
       "image": null,
-      "id": 1,
-      "editedDate": "2022-08-14T11:21:01.453Z"
+      "id": 1
     },
     {
-      "text": "sdfasdfsdfas2",
-      "createdDate": "2022-08-14T11:21:05.333Z",
+      "text": "2",
+      "createdDate": "2022-08-14T18:00:01.826Z",
       "like": 0,
       "dislike": 0,
       "image": null,
-      "id": 2,
-      "editedDate": "2022-08-14T11:23:09.253Z"
+      "id": 2
+    },
+    {
+      "text": "asd",
+      "createdDate": "2022-08-14T18:18:12.650Z",
+      "like": 0,
+      "dislike": 0,
+      "image": null,
+      "id": 3
     }
   ],
   "comments": [],

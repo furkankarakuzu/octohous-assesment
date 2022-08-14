@@ -215,26 +215,22 @@ export default {
 
     //LIKE FUNCTION
     async likePost(post) {
-      // if (localStorage.getItem("likedPosts")) {
-      //   let ids = localStorage.getItem("likedPosts");
-      //   let idsArr = ids.split();
-      //   if (idsArr.filter((item) => item == post.id)) {
-      //     let index = idsArr.indexOf(post.id);
-      //     idsArr.splice(index, 1);
-      //     localStorage.setItem("likedPosts", idsArr.join(""));
-      //   } else {
-      //     idsArr.push(post.id);
-      //     localStorage.setItem("likedPosts", idsArr.join(""));
-      //     post.like++;
-      //   }
-      // } else {
-      //   localStorage.setItem("likedPosts", post.id);
-      //   post.like++;
-      // }
-      localStorage.setItem(
-        "likedPosts",
-        this.likedPosts.splice("").join("") + post.id
-      );
+      if (localStorage.getItem("likedPosts")) {
+        let ids = localStorage.getItem("likedPosts").split(",");
+        console.log(post.id);
+        if (ids.includes(post.id.toString())) {
+          post.like--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+        } else {
+          ids = [...ids, post.id];
+          post.like++;
+        }
+        localStorage.setItem("likedPosts", ids.join(","));
+      } else {
+        post.like++;
+        localStorage.setItem("likedPosts", post.id);
+      }
       try {
         await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
         await this.getPosts();
@@ -268,6 +264,15 @@ export default {
     async deletePost(post) {
       this.deleteWaiting = true;
       this.deletedPost = post;
+      if (localStorage.getItem("likedPosts")) {
+        let ids = localStorage.getItem("likedPosts").split(",");
+        if (ids.includes(post.id.toString())) {
+          post.like--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+          localStorage.setItem("likedPosts", ids.join(","));
+        }
+      }
       try {
         await Axios.delete(`http://localhost:3000/posts/${post.id}`);
         await this.getPosts();
