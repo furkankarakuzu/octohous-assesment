@@ -82,7 +82,12 @@
                 <v-col class="ms-4" cols="10"
                   ><div>
                     <span class="post-date">
-                      {{ dayjs(post.date).format("DD.MM.YYYY HH:mm") }}
+                      {{
+                        post.editedDate
+                          ? "was held on " +
+                            dayjs(post.editedDate).format("DD.MM.YYYY HH:mm")
+                          : dayjs(post.createdDate).format("DD.MM.YYYY HH:mm")
+                      }}
                     </span>
                     <p>
                       <span class="text-primary font-weight-bold me-2"
@@ -173,7 +178,9 @@ export default {
       try {
         const res = await Axios.get("http://localhost:3000/posts");
         this.posts = res.data;
-        this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        this.posts.sort(
+          (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+        );
       } catch (error) {
         console.log(error);
       }
@@ -184,7 +191,7 @@ export default {
       try {
         let data = {
           text: this.postText,
-          date: new Date(),
+          createdDate: new Date(),
           like: 0,
           dislike: 0,
           image: this.uploadedImage,
@@ -240,6 +247,7 @@ export default {
     //UPDATE FUNCTION
     async updatePost(post) {
       try {
+        post.editedDate = new Date();
         await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
         this.editPost = false;
         await this.getPosts();

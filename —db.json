@@ -1,28 +1,21 @@
 {
   "posts": [
     {
-      "text": "",
-      "date": "2022-08-14T10:27:09.784Z",
-      "like": 0,
-      "dislike": 0,
-      "image": "blob:http://localhost:8080/9fa48b90-cdd5-433d-8ae4-a10b6f600ce3",
-      "id": 2
-    },
-    {
-      "text": "asdasdasd",
-      "date": "2022-08-14T11:07:39.993Z",
+      "text": "asdasdasd5",
+      "createdDate": "2022-08-14T11:18:26.644Z",
       "like": 0,
       "dislike": 0,
       "image": null,
-      "id": 4
+      "id": 1,
+      "editedDate": "2022-08-14T11:21:01.453Z"
     },
     {
-      "text": "asdasdasd",
-      "date": "2022-08-14T11:10:27.428Z",
+      "text": "sdfasdfsdfas",
+      "createdDate": "2022-08-14T11:21:05.333Z",
       "like": 0,
       "dislike": 0,
-      "image": "blob:http://localhost:8080/6394c73b-7314-4815-878b-08d8272369d0",
-      "id": 5
+      "image": null,
+      "id": 2
     }
   ],
   "comments": [],
