@@ -40,7 +40,7 @@
                     icon
                     elevation="0"
                     style="rotate: -45deg"
-                    @click="openFileInput"
+                    @click="openFileInput('fileInput')"
                   >
                     <vue-feather
                       size="18"
@@ -109,8 +109,36 @@
                     </p>
 
                     <div class="post-image-container mt-2" v-if="post.image">
-                      <button id="x" @click="post.image = null" v-if="post.editPost">X</button>
+                      <button
+                        id="x"
+                        @click="post.image = null"
+                        v-if="post.editPost"
+                      >
+                        X
+                      </button>
                       <img class="post-image" :src="post.image" />
+                      <div v-if="post.editPost">
+                        <input
+                          id="editFileInput"
+                          accept="image/png, image/gif, image/jpeg"
+                          type="file"
+                          @change="onChange($event, post)"
+                          hidden
+                        />
+                        <v-btn
+                          size="x-small"
+                          icon
+                          elevation="0"
+                          style="rotate: -45deg"
+                          @click="openFileInput('editFileInput')"
+                        >
+                          <vue-feather
+                            size="18"
+                            stroke="#00000029"
+                            type="paperclip"
+                          ></vue-feather>
+                        </v-btn>
+                      </div>
                     </div>
                   </div>
                 </v-col>
@@ -228,7 +256,6 @@ export default {
       }
       if (localStorage.getItem("likedPosts")) {
         let ids = localStorage.getItem("likedPosts").split(",");
-        console.log(post.id);
         if (ids.includes(post.id.toString())) {
           post.like--;
           let index = ids.indexOf(post.id.toString());
@@ -283,12 +310,17 @@ export default {
     },
 
     //FILE UPLOAD FUNCTIONS
-    openFileInput() {
-      document.getElementById("fileInput").click();
+    openFileInput(id) {
+      document.getElementById(id).click();
     },
-    onChange(event) {
+    onChange(event, post = null) {
       const file = event.target.files[0];
-      this.uploadedImage = URL.createObjectURL(file);
+
+      if (post) {
+        post.image = URL.createObjectURL(file).toString();
+      } else {
+        this.uploadedImage = URL.createObjectURL(file);
+      }
     },
 
     //UPDATE FUNCTION

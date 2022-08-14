@@ -32,6 +32,23 @@
       "image": null,
       "id": 4,
       "editedDate": "2022-08-14T19:05:20.468Z"
+    },
+    {
+      "text": "1",
+      "createdDate": "2022-08-14T19:06:10.228Z",
+      "like": 0,
+      "dislike": 0,
+      "image": "blob:http://localhost:8080/ec2daf1f-eb75-414e-96b2-21577467e35d",
+      "id": 5,
+      "editedDate": "2022-08-14T19:38:05.857Z"
+    },
+    {
+      "text": "3",
+      "createdDate": "2022-08-14T19:38:15.379Z",
+      "like": 0,
+      "dislike": 0,
+      "image": "blob:http://localhost:8080/c8111b77-0b38-4f85-83d2-a4832a0c993d",
+      "id": 6
     }
   ],
   "comments": [],
