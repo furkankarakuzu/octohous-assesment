@@ -1,22 +1,40 @@
 <template>
   <v-app>
     <v-main>
-      <v-row justify="center">
+      <v-btn
+        v-if="deleteWaiting"
+        icon
+        color="info"
+        @click="cancelDelete"
+        class="cancel-delete-btn"
+      >
+        <v-icon>mdi-cached</v-icon>
+      </v-btn>
+      <v-row justify="center" class="mt-5">
         <v-col cols="10" sm="8" md="4" lg="4">
           <v-card ref="form">
             <v-card-text>
               <textarea
                 placeholder="Your text here"
                 id="text-input"
+                v-model="postText"
                 rows="4"
               ></textarea>
               <div class="d-flex">
                 <div>
+                  <input
+                    id="fileInput"
+                    accept="image/png, image/gif, image/jpeg"
+                    type="file"
+                    @change="onChange"
+                    hidden
+                  />
                   <v-btn
                     size="x-small"
                     icon
                     elevation="0"
                     style="rotate: -45deg"
+                    @click="openFileInput"
                   >
                     <vue-feather
                       size="18"
@@ -33,13 +51,13 @@
                   </v-btn>
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn color="primary"> Submit </v-btn>
+                <v-btn color="primary" @click="savePost"> Submit </v-btn>
               </div>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <v-row justify="center">
+      <v-row justify="center" v-for="(post, index) in posts" :key="index">
         <v-col cols="10" sm="8" md="4" lg="4">
           <v-card>
             <v-card-text class="d-flex">
@@ -56,14 +74,30 @@
                 </v-col>
                 <v-col class="ms-4" cols="10"
                   ><div>
-                    <span class="post-date">30.08.2022 12:39</span>
+                    <span class="post-date">
+                      {{ dayjs(post.date).format("DD.MM.YYYY HH:mm") }}
+                    </span>
                     <p>
-                      <span class="text-primary font-weight-bold"
+                      <span class="text-primary font-weight-bold me-2"
                         >Jane Doe</span
                       >
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                      Animi alias esse dicta placeat
+                      <span v-if="!editPost">
+                        {{ post.text }}
+                      </span>
+                      <span class="d-flex justify-space-between" v-else>
+                        <input type="text" class="w-100" v-model="post.text" />
+                        <v-btn color="primary" @click="updatePost(post)">
+                          Edit
+                        </v-btn>
+                      </span>
                     </p>
+                    <div v-if="post.image">
+                      <img
+                        class="post-image"
+                        :alt="post.text"
+                        :src="post.image"
+                      />
+                    </div>
                   </div>
                 </v-col>
               </v-row>
@@ -71,21 +105,30 @@
             <v-divider></v-divider>
             <v-card-actions>
               <div>
-                <v-btn size="small" icon elevation="0">
+                <v-btn size="small" icon elevation="0" @click="likePost(post)">
                   <LikeIcon />
-                  <span class="ms-1" style="color: #00000029">0</span>
+                  <span class="ms-1" style="color: #00000029">{{
+                    post.like
+                  }}</span>
                 </v-btn>
                 <v-btn size="small" icon elevation="0">
                   <UnlikeIcon />
-                  <span class="ms-1" style="color: #00000029">0</span>
+                  <span class="ms-1" style="color: #00000029">{{
+                    post.dislike
+                  }}</span>
                 </v-btn>
               </div>
               <v-spacer></v-spacer>
               <div>
-                <v-btn size="small" icon elevation="0">
+                <v-btn size="small" @click="editPost = true" icon elevation="0">
                   <EditIcon />
                 </v-btn>
-                <v-btn size="small" icon elevation="0">
+                <v-btn
+                  size="small"
+                  icon
+                  elevation="0"
+                  @click="deletePost(post)"
+                >
                   <DeleteIcon />
                 </v-btn>
               </div>
@@ -98,15 +141,146 @@
 </template>
 
 <script>
+import Axios from "axios";
+import dayjs from "dayjs";
 export default {
   name: "App",
   data: () => ({
-    //
+    //new post variables
+    postText: "",
+    posts: [],
+    uploadedImage: null,
+    /**/
+    likedPosts: [],
+    //update variables
+    editPost: false,
+    //delete variables
+    deleteWaiting: false,
+    deleteWaitingTimeOut: null,
+    deletedPost: null,
+    /**/
+    dayjs,
   }),
   methods: {
-    submit() {
-      console.log("hey");
+    async getPosts() {
+      try {
+        const res = await Axios.get("http://localhost:3000/posts");
+        this.posts = res.data;
+        this.posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } catch (error) {
+        console.log(error);
+      }
     },
+
+    //SAVE FUNCTION
+    async savePost() {
+      try {
+        let data = {
+          text: this.postText,
+          date: new Date(),
+          like: 0,
+          dislike: 0,
+          image: this.uploadedImage,
+        };
+        await Axios.post("http://localhost:3000/posts", data);
+        await this.getPosts();
+        this.postText = "";
+        this.uploadedImage = null;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    //LIKE FUNCTION
+    async likePost(post) {
+      // if (localStorage.getItem("likedPosts")) {
+      //   let ids = localStorage.getItem("likedPosts");
+      //   let idsArr = ids.split();
+      //   if (idsArr.filter((item) => item == post.id)) {
+      //     let index = idsArr.indexOf(post.id);
+      //     idsArr.splice(index, 1);
+      //     localStorage.setItem("likedPosts", idsArr.join(""));
+      //   } else {
+      //     idsArr.push(post.id);
+      //     localStorage.setItem("likedPosts", idsArr.join(""));
+      //     post.like++;
+      //   }
+      // } else {
+      //   localStorage.setItem("likedPosts", post.id);
+      //   post.like++;
+      // }
+      localStorage.setItem(
+        "likedPosts",
+        this.likedPosts.splice("").join("") + post.id
+      );
+      try {
+        await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
+        await this.getPosts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    //FILE UPLOAD FUNCTIONS
+    openFileInput() {
+      document.getElementById("fileInput").click();
+    },
+    onChange(event) {
+      const file = event.target.files[0];
+      this.uploadedImage = URL.createObjectURL(file);
+    },
+
+    //UPDATE FUNCTIONS
+    async updatePost(post) {
+      try {
+        await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
+        this.editPost = false;
+        await this.getPosts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //DELETE FUNCTIONS
+    async deletePost(post) {
+      this.deleteWaiting = true;
+      this.deletedPost = post;
+      try {
+        await Axios.delete(`http://localhost:3000/posts/${post.id}`);
+        await this.getPosts();
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        await Axios.post(`http://localhost:3000/deletedPosts`, post);
+      } catch (error) {
+        console.log(error);
+      }
+      this.deleteWaitingTimeOut = setTimeout(async () => {
+        this.deleteWaiting = false;
+      }, 10000);
+    },
+    async cancelDelete() {
+      clearTimeout(this.deleteWaitingTimeOut);
+      try {
+        await Axios.delete(
+          `http://localhost:3000/deletedPosts/${this.deletedPost.id}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      try {
+        await Axios.post(`http://localhost:3000/posts`, this.deletedPost);
+        await this.getPosts();
+      } catch (error) {
+        console.log(error);
+      }
+      this.deletedPost = null;
+      this.deleteWaiting = false;
+    },
+  },
+  async beforeMount() {
+    await this.getPosts();
+    this.likedPosts = [localStorage.getItem("likedPosts")] || [];
   },
 };
 </script>
@@ -133,5 +307,16 @@ body {
 .post-date {
   font-size: 11px;
   color: #99a4ae;
+}
+
+.post-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.cancel-delete-btn {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
 }
 </style>

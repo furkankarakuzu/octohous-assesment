@@ -1,0 +1,24 @@
+{
+  "posts": [
+    {
+      "text": "",
+      "date": "2022-08-14T10:27:09.784Z",
+      "like": 0,
+      "dislike": 0,
+      "image": "blob:http://localhost:8080/9fa48b90-cdd5-433d-8ae4-a10b6f600ce3",
+      "id": 2
+    },
+    {
+      "text": "asdasdasd",
+      "date": "2022-08-14T11:07:39.993Z",
+      "like": 0,
+      "dislike": 0,
+      "image": null,
+      "id": 4
+    }
+  ],
+  "comments": [],
+  "profile": {
+    "name": "typicode"
+  }
+}

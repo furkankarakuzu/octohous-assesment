@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "text": "asdjkhasjd",
+      "date": "2022-08-09T17:47:40.793Z",
+      "like": 4,
+      "dislike": 0,
+      "id": 1
+    },
+    {
+      "text": "sadasdasdasd",
+      "date": "2022-08-09T17:48:53.967Z",
+      "like": 1,
+      "dislike": 0,
+      "id": 2
+    }
+  ],
+  "comments": [],
+  "profile": {
+    "name": "typicode"
+  }
+}
