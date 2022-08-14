@@ -128,7 +128,12 @@
                     post.like
                   }}</span>
                 </v-btn>
-                <v-btn size="small" icon elevation="0">
+                <v-btn
+                  size="small"
+                  icon
+                  elevation="0"
+                  @click="dislikePost(post)"
+                >
                   <UnlikeIcon />
                   <span class="ms-1" style="color: #00000029">{{
                     post.dislike
@@ -213,7 +218,7 @@ export default {
       }
     },
 
-    //LIKE FUNCTION
+    //LIKE/DISLIKE FUNCTIONS
     async likePost(post) {
       if (localStorage.getItem("likedPosts")) {
         let ids = localStorage.getItem("likedPosts").split(",");
@@ -230,6 +235,29 @@ export default {
       } else {
         post.like++;
         localStorage.setItem("likedPosts", post.id);
+      }
+      try {
+        await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
+        await this.getPosts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async dislikePost(post) {
+      if (localStorage.getItem("dislikedPosts")) {
+        let ids = localStorage.getItem("dislikedPosts").split(",");
+        if (ids.includes(post.id.toString())) {
+          post.dislike--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+        } else {
+          ids = [...ids, post.id];
+          post.dislike++;
+        }
+        localStorage.setItem("dislikedPosts", ids.join(","));
+      } else {
+        post.dislike++;
+        localStorage.setItem("dislikedPosts", post.id);
       }
       try {
         await Axios.put(`http://localhost:3000/posts/${post.id}`, post);
@@ -271,6 +299,15 @@ export default {
           let index = ids.indexOf(post.id.toString());
           ids.splice(index, 1);
           localStorage.setItem("likedPosts", ids.join(","));
+        }
+      }
+      if (localStorage.getItem("dislikedPosts")) {
+        let ids = localStorage.getItem("dislikedPosts").split(",");
+        if (ids.includes(post.id.toString())) {
+          post.dislike--;
+          let index = ids.indexOf(post.id.toString());
+          ids.splice(index, 1);
+          localStorage.setItem("dislikedPosts", ids.join(","));
         }
       }
       try {
